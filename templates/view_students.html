@@ -1,0 +1,49 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+<h3 class="mb-4">All Students</h3>
+
+{% if students %}
+<table class="table table-striped table-bordered align-middle">
+    <thead class="table-primary">
+        <tr>
+            <th>Sr. No.</th>
+            <th>Username</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Class</th>
+            <th>Board</th>
+            <th>Stream</th>
+            <th>Subjects</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ loop.index }}</td>        <!-- Serial Number -->
+            <td>{{ s[1] }}</td>              <!-- Username -->
+            <td>{{ s[2] }}</td>              <!-- Name -->
+            <td>{{ s[3] }}</td>              <!-- DOB -->
+            <td>{{ s[4] }}</td>              <!-- Contact -->
+            <td>{{ s[5] }}</td>              <!-- Email -->
+            <td>{{ s[6] }}</td>              <!-- Class -->
+            <td>{{ s[7] }}</td>              <!-- Board -->
+            <td>{{ s[8] if s[8] else "-" }}</td> <!-- Stream -->
+            <td>{{ s[9] if s[9] else "-" }}</td> <!-- Subjects -->
+            <td class="d-flex gap-2">
+                <a href="/edit-student/{{ s[0] }}" class="btn btn-sm btn-warning">Edit</a>
+                <form method="POST" action="/delete-student/{{ s[0] }}" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No students found in the system.</p>
+{% endif %}
+{% endblock %}

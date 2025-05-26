@@ -1,0 +1,29 @@
+{% extends "admin_dashboard.html" %}
+{% block content %}
+<h3 class="mb-4">Add New Homework</h3>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Title:</label>
+        <input type="text" name="title" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description:</label>
+        <textarea name="description" class="form-control" rows="4" required></textarea>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Due Date:</label>
+            <input type="date" name="due_date" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Assigned Class:</label>
+            <select name="assigned_class" class="form-select" required>
+                {% for c in range(5, 13) %}
+                    <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Homework</button>
+</form>
+{% endblock %}

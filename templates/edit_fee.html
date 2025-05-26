@@ -1,0 +1,65 @@
+{% extends "admin_dashboard.html" %}
+{% block content %}
+<h3 class="mb-4">Edit Fee Payment</h3>
+
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Select Student:</label>
+        <select name="student_id" class="form-select" required>
+            {% for student in students %}
+                <option value="{{ student[0] }}" {% if student[0] == fee[1] %}selected{% endif %}>
+                    {{ student[1] }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Amount Paid (₹):</label>
+            <input type="number" step="0.01" name="amount" class="form-control" value="{{ fee[2] }}" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Expected Fee (₹):</label>
+            <input type="number" step="0.01" name="expected_fee" class="form-control" value="{{ fee[3] }}" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Month:</label>
+            <select name="month" class="form-select" required>
+                {% for m in ['January', 'February', 'March', 'April', 'May', 'June',
+                             'July', 'August', 'September', 'October', 'November', 'December'] %}
+                    <option value="{{ m }}" {% if m == fee[4] %}selected{% endif %}>{{ m }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Year:</label>
+            <input type="text" name="year" class="form-control" value="{{ fee[5] }}" required>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Payment Date:</label>
+        <input type="date" name="payment_date" class="form-control" value="{{ fee[6] }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Payment Mode:</label>
+        <select name="payment_mode" class="form-select" required>
+            {% for mode in ['Cash', 'UPI', 'Bank Transfer', 'Other'] %}
+                <option value="{{ mode }}" {% if mode == fee[7] %}selected{% endif %}>{{ mode }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Notes (optional):</label>
+        <textarea name="notes" class="form-control" rows="2">{{ fee[8] }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Payment</button>
+</form>
+{% endblock %}

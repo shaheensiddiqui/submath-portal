@@ -1,0 +1,48 @@
+{% extends "admin_dashboard.html" %}
+{% block content %}
+
+<h3 class="mb-3">{{ hw[1] }}</h3>
+<p><strong>Due Date:</strong> {{ hw[3] }} &nbsp; | &nbsp; <strong>Class:</strong> {{ hw[4] }}</p>
+<p>{{ hw[2] }}</p>
+
+<hr>
+
+<form method="POST">
+    <h5 class="mt-4 mb-3">Grade Students</h5>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Sr. No.</th>
+                <th>Student Name</th>
+                <th>Grade (Letter or Marks)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ student[1] }}</td>
+                <td>
+                    <input type="text" class="form-control" name="grade_{{ student[0] }}"
+                           value="{{ submitted.get(student[0], '') }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Save Grades</button>
+</form>
+
+<hr>
+
+<div class="mt-4 d-flex justify-content-between">
+   
+
+    <form method="POST" action="{{ url_for('delete_homework', homework_id=hw[0]) }}"
+          onsubmit="return confirm('Are you sure you want to delete this homework?');">
+        <button type="submit" class="btn btn-outline-danger">Delete Homework</button>
+    </form>
+</div>
+
+{% endblock %}

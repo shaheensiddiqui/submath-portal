@@ -1,0 +1,21 @@
+{% extends "admin_dashboard.html" %}
+{% block content %}
+<h3 class="mb-4">Progress Summary for {{ student[0] }}</h3>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>Total Lectures Conducted:</strong> {{ total_lectures }}</p>
+        <p><strong>Lectures Absent:</strong> {{ absent_lectures }}</p>
+        <p><strong>Total Homework Given to Class:</strong> {{ total_homework }}</p>
+        <p><strong>Homework Completed by Student:</strong> {{ completed_homework }}</p>
+    </div>
+</div>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="comment" class="form-label"><strong>Admin Comment for Student:</strong></label>
+        <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your feedback here...">{{ comment }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Progress Note</button>
+</form>
+{% endblock %}

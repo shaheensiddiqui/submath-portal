@@ -1,0 +1,117 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Edit Student - Step 2</h3>
+
+            <form method="POST" id="step2-form">
+                <div class="mb-3">
+                    <label class="form-label">Board</label>
+                    <select name="board" class="form-select" required>
+                        <option value="">Select Board</option>
+                        <option value="CBSE" {% if subject_data[1] == "CBSE" %}selected{% endif %}>CBSE</option>
+                        <option value="ICSE" {% if subject_data[1] == "ICSE" %}selected{% endif %}>ICSE</option>
+                        <option value="SSC" {% if subject_data[1] == "SSC" %}selected{% endif %}>SSC</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Class</label>
+                    <select name="class" id="class-select" class="form-select" required onchange="handleClassChange()">
+                        <option value="">Select Class</option>
+                        {% for i in range(5, 13) %}
+                        <option value="{{ i }}" {% if subject_data[0] == i %}selected{% endif %}>{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="stream-section" class="mb-3" style="display: none;">
+                    <label class="form-label">Stream</label>
+                    <select name="stream" id="stream-select" class="form-select" onchange="handleStreamChange()">
+                        <option value="">Select Stream</option>
+                        <option value="Science" {% if subject_data[2] == "Science" %}selected{% endif %}>Science</option>
+                        <option value="Commerce" {% if subject_data[2] == "Commerce" %}selected{% endif %}>Commerce</option>
+                    </select>
+                </div>
+
+                <div id="subjects-section" class="mb-3" style="display: none;">
+                    <label class="form-label">Subjects</label>
+                    <div id="subject-checkboxes" class="form-check">
+                        <!-- checkboxes inserted by JS -->
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const allSubjects = [
+        "Math", "Physics", "Chemistry", "Biology",
+        "English", "Hindi", "History", "Geography",
+        "Marathi", "Economics", "Computer"
+    ];
+
+    const savedSubjects = `{{ subject_data[3] or '' }}`.split(',').map(s => s.trim());
+    const classVal = parseInt(`{{ subject_data[0] or 0 }}`);
+    const streamVal = `{{ subject_data[2] or '' }}`;
+
+    const streamSection = document.getElementById("stream-section");
+    const subjectSection = document.getElementById("subjects-section");
+    const subjectContainer = document.getElementById("subject-checkboxes");
+
+    function handleClassChange() {
+        const classSelected = parseInt(document.getElementById("class-select").value);
+        streamSection.style.display = "none";
+        subjectSection.style.display = "none";
+        subjectContainer.innerHTML = "";
+
+        if (classSelected >= 5 && classSelected <= 10) {
+            subjectSection.style.display = "block";
+            allSubjects.forEach(sub => {
+                const checked = savedSubjects.includes(sub) ? 'checked' : '';
+                const checkbox = `<div class="form-check">
+                    <input type="checkbox" name="subjects" class="form-check-input" value="${sub}" ${checked}>
+                    <label class="form-check-label">${sub}</label>
+                </div>`;
+                subjectContainer.innerHTML += checkbox;
+            });
+        } else if (classSelected === 11 || classSelected === 12) {
+            streamSection.style.display = "block";
+            if (streamVal) {
+                document.getElementById("stream-select").value = streamVal;
+                handleStreamChange(); // auto-fill subjects if pre-selected
+            }
+        }
+    }
+
+    function handleStreamChange() {
+        const selected = document.getElementById("stream-select").value;
+        subjectSection.style.display = "block";
+        subjectContainer.innerHTML = "";
+
+        let streamSubjects = [];
+        if (selected === "Science") {
+            streamSubjects = ["Math", "Physics", "Chemistry", "Biology"];
+        } else if (selected === "Commerce") {
+            streamSubjects = ["Math"];
+        }
+
+        streamSubjects.forEach(sub => {
+            const checked = savedSubjects.includes(sub) ? 'checked' : '';
+            const checkbox = `<div class="form-check">
+                <input type="checkbox" name="subjects" class="form-check-input" value="${sub}" ${checked}>
+                <label class="form-check-label">${sub}</label>
+            </div>`;
+            subjectContainer.innerHTML += checkbox;
+        });
+    }
+
+    // Auto trigger on page load
+    handleClassChange();
+</script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+<h3 class="mb-4">Add New Student - Step 2</h3>
+
+<form method="POST" id="step2-form">
+    <div class="mb-3">
+        <label class="form-label">Board</label>
+        <select name="board" class="form-select" required>
+            <option value="">Select Board</option>
+            <option value="CBSE">CBSE</option>
+            <option value="ICSE">ICSE</option>
+            <option value="SSC">SSC</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Class</label>
+        <select name="class" id="class-select" class="form-select" required onchange="handleClassChange()">
+            <option value="">Select Class</option>
+            {% for i in range(5, 13) %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="stream-section" class="mb-3" style="display: none;">
+        <label class="form-label">Stream</label>
+        <select name="stream" id="stream-select" class="form-select" onchange="handleStreamChange()">
+            <option value="">Select Stream</option>
+            <option value="Science">Science</option>
+            <option value="Commerce">Commerce</option>
+        </select>
+    </div>
+
+    <div id="subjects-section" class="mb-3" style="display: none;">
+        <label class="form-label">Select Subjects</label>
+        <div id="subject-checkboxes" class="form-check">
+            <!-- dynamically inserted -->
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+<script>
+    const allSubjects = [
+        "Math", "Physics", "Chemistry", "Biology",
+        "English", "Hindi", "History", "Geography",
+        "Marathi", "Economics", "Computer"
+    ];
+
+    function handleClassChange() {
+        const classVal = parseInt(document.getElementById("class-select").value);
+        const streamSection = document.getElementById("stream-section");
+        const subjectSection = document.getElementById("subjects-section");
+        const subjectContainer = document.getElementById("subject-checkboxes");
+
+        subjectContainer.innerHTML = "";
+        streamSection.style.display = "none";
+        subjectSection.style.display = "none";
+
+        if (classVal >= 5 && classVal <= 10) {
+            subjectSection.style.display = "block";
+            allSubjects.forEach(sub => {
+                const checkbox = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="subjects" value="${sub}">
+                        <label class="form-check-label">${sub}</label>
+                    </div>`;
+                subjectContainer.innerHTML += checkbox;
+            });
+        } else if (classVal === 11 || classVal === 12) {
+            streamSection.style.display = "block";
+        }
+    }
+
+    function handleStreamChange() {
+        const streamVal = document.getElementById("stream-select").value;
+        const subjectSection = document.getElementById("subjects-section");
+        const subjectContainer = document.getElementById("subject-checkboxes");
+
+        subjectContainer.innerHTML = "";
+        subjectSection.style.display = "block";
+
+        if (streamVal === "Science") {
+            ["Math", "Physics", "Chemistry", "Biology"].forEach(sub => {
+                const checkbox = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="subjects" value="${sub}" checked>
+                        <label class="form-check-label">${sub}</label>
+                    </div>`;
+                subjectContainer.innerHTML += checkbox;
+            });
+        } else if (streamVal === "Commerce") {
+            const checkbox = `
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="subjects" value="Math" checked>
+                    <label class="form-check-label">Math</label>
+                </div>`;
+            subjectContainer.innerHTML += checkbox;
+        }
+    }
+</script>
+{% endblock %}

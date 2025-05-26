@@ -1,0 +1,90 @@
+{% extends "admin_dashboard.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Edit Student - Step 1</h3>
+
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            <div id="error-bar" class="text-danger fw-semibold mb-3"></div>
+
+            <form method="POST" onsubmit="return validateForm()" class="row g-3">
+                <input type="hidden" name="student_id" value="{{ student[0] }}">
+
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="name" id="name" value="{{ student[1] }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob" id="dob" value="{{ student[2] }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="contact" class="form-label">Contact</label>
+                    <input type="text" class="form-control" name="contact" id="contact" value="{{ student[3] }}" required maxlength="10">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" value="{{ student[4] }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" value="{{ student[5] }}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" value="{{ student[6] }}" required minlength="4">
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-warning">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        const name = document.getElementById("name").value.trim();
+        const contact = document.getElementById("contact").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const errorBar = document.getElementById("error-bar");
+
+        const nameRegex = /^[A-Za-z\s]+$/;
+        if (!nameRegex.test(name)) {
+            errorBar.innerText = "Name must not contain numbers or special characters.";
+            return false;
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(contact)) {
+            errorBar.innerText = "Contact must be exactly 10 digits.";
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            errorBar.innerText = "Please enter a valid email address.";
+            return false;
+        }
+
+        if (password.length < 4) {
+            errorBar.innerText = "Password must be at least 4 characters long.";
+            return false;
+        }
+
+        errorBar.innerText = "";
+        return true;
+    }
+</script>
+{% endblock %}

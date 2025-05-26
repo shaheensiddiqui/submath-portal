@@ -1,0 +1,42 @@
+{% extends "admin_dashboard.html" %}
+{% block content %}
+<h3 class="mb-4">View Attendance</h3>
+
+<form method="POST" class="mb-4">
+    <label for="attendance_date" class="form-label">Select Date:</label>
+    <input type="date" name="attendance_date" id="attendance_date"
+       class="form-control" max="{{ today }}" required>
+
+    <button type="submit" class="btn btn-primary mt-2">View</button>
+</form>
+
+{% if selected_date %}
+    <h5 class="mt-4">Attendance for {{ selected_date }}</h5>
+
+    {% if records %}
+        <p><strong>Total Students:</strong> {{ total_students }} &nbsp; | &nbsp;
+           <strong>Absent:</strong> {{ absent_count }}</p>
+
+        <table class="table table-bordered mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name, status in records %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ name }}</td>
+                    <td>{{ status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning mt-3">No attendance records found for this date.</div>
+    {% endif %}
+{% endif %}
+{% endblock %}
